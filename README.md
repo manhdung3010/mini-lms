@@ -95,6 +95,10 @@ Mở [http://localhost:3000](http://localhost:3000).
 | `npm run db:seed` | Seed dữ liệu mẫu |
 | `npm run db:studio` | Mở Prisma Studio (xem/sửa DB) |
 | `npm run db:generate` | Generate Prisma Client |
+| `npm run docker:up` | Chạy full stack (DB + app) bằng Docker |
+| `npm run docker:down` | Dừng toàn bộ Docker Compose |
+| `npm run docker:seed` | Seed DB trong container app |
+| `npm run docker:logs` | Xem logs container app |
 
 ---
 

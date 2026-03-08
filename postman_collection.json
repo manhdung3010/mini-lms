@@ -1,0 +1,199 @@
+{
+  "info": {
+    "name": "Mini LMS API",
+    "description": "API collection for Mini LMS - Learning Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    }
+  ],
+  "item": [
+    {
+      "name": "Stats",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/stats"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Parents",
+      "item": [
+        {
+          "name": "Create Parent",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/parents",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lê Văn Test\",\n  \"phone\": \"0909999888\",\n  \"email\": \"test@email.com\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Parents",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/parents"
+          }
+        },
+        {
+          "name": "Get Parent by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/parents/{{parentId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Students",
+      "item": [
+        {
+          "name": "Create Student",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/students",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lê Minh Test\",\n  \"dob\": \"2016-05-20\",\n  \"gender\": \"MALE\",\n  \"currentGrade\": \"4\",\n  \"parentId\": \"{{parentId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Students",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/students"
+          }
+        },
+        {
+          "name": "Get Student by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/students/{{studentId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Classes",
+      "item": [
+        {
+          "name": "Create Class",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/classes",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lớp Vẽ Sáng Tạo\",\n  \"subject\": \"Mỹ Thuật\",\n  \"dayOfWeek\": \"FRIDAY\",\n  \"timeSlotStart\": \"14:00\",\n  \"timeSlotEnd\": \"15:30\",\n  \"teacherName\": \"Cô Linh\",\n  \"maxStudents\": 12\n}"
+            }
+          }
+        },
+        {
+          "name": "List Classes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/classes"
+          }
+        },
+        {
+          "name": "List Classes by Day",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/classes?day=MONDAY"
+          }
+        },
+        {
+          "name": "Get Class by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/classes/{{classId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Registrations",
+      "item": [
+        {
+          "name": "Register Student to Class",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/classes/{{classId}}/register",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": \"{{studentId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Cancel Registration",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/registrations/{{registrationId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subscriptions",
+      "item": [
+        {
+          "name": "Create Subscription",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/subscriptions",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": \"{{studentId}}\",\n  \"packageName\": \"Gói Test 3 Tháng\",\n  \"startDate\": \"2026-03-01\",\n  \"endDate\": \"2026-05-31\",\n  \"totalSessions\": 24\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Subscription by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/subscriptions/{{subscriptionId}}"
+          }
+        },
+        {
+          "name": "List Subscriptions",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/subscriptions"
+          }
+        },
+        {
+          "name": "Use 1 Session",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/subscriptions/{{subscriptionId}}/use"
+          }
+        }
+      ]
+    }
+  ]
+}

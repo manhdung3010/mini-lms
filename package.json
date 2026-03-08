@@ -13,7 +13,11 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "db:docker:up": "docker compose up -d db",
-    "db:docker:down": "docker compose stop db"
+    "db:docker:down": "docker compose down",
+    "docker:up": "docker compose up --build -d",
+    "docker:down": "docker compose down",
+    "docker:seed": "docker compose exec app npx tsx prisma/seed.ts",
+    "docker:logs": "docker compose logs -f app"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
