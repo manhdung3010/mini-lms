@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mini LMS
 
-## Getting Started
+Ứng dụng web quản lý học tập (Learning Management System): quản lý Phụ huynh – Học sinh, Lớp học, Đăng ký lớp và Gói học (Subscription).
 
-First, run the development server:
+**Tech:** Next.js 16, TypeScript, Prisma, PostgreSQL, Tailwind CSS, shadcn/ui.
+
+---
+
+## Yêu cầu
+
+- **Node.js** 18+ (khuyến nghị 20+)
+- **npm** hoặc pnpm / yarn
+- **Docker** & **Docker Compose** (để chạy PostgreSQL nếu chưa cài sẵn)
+
+---
+
+## Cài đặt
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone (nếu chưa có)
+git clone <repo-url>
+cd mini-lms
+
+# Cài dependency
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Cấu hình
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Tạo file `.env` từ mẫu và chỉnh nếu cần:
 
-## Learn More
+```bash
+cp .env.example .env
+```
 
-To learn more about Next.js, take a look at the following resources:
+Nội dung mặc định (PostgreSQL qua Docker hoặc local):
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+DATABASE_URL="postgresql://lms_user:lms_password@localhost:5432/mini_lms?schema=public"
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Chạy dự án
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 1. Bật PostgreSQL
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Cách A – Dùng Docker (khuyến nghị nếu chưa cài Postgres):**
+
+```bash
+npm run db:docker:up
+```
+
+Chạy container PostgreSQL (port `5432`). Dừng khi không dùng: `npm run db:docker:down`.
+
+**Cách B – Postgres đã cài sẵn trên máy:**
+
+- Tạo database `mini_lms` và user tương ứng (hoặc dùng user/password trong `.env`).
+- Đảm bảo `.env` trỏ đúng host/port/user/password.
+
+### 2. Tạo schema và dữ liệu mẫu
+
+```bash
+# Áp schema lên DB (tạo/cập nhật bảng)
+npx prisma db push
+
+# (Tùy chọn) Seed dữ liệu mẫu
+npm run db:seed
+```
+
+### 3. Chạy ứng dụng
+
+```bash
+# Development
+npm run dev
+```
+
+Mở [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Scripts thường dùng
+
+| Lệnh | Mô tả |
+|------|--------|
+| `npm run dev` | Chạy Next.js dev server |
+| `npm run build` | Build production |
+| `npm run start` | Chạy bản build (sau `npm run build`) |
+| `npm run db:docker:up` | Chạy PostgreSQL bằng Docker |
+| `npm run db:docker:down` | Dừng container PostgreSQL |
+| `npm run db:push` | Đồng bộ schema Prisma → DB |
+| `npm run db:migrate` | Chạy migration (tạo file migration) |
+| `npm run db:seed` | Seed dữ liệu mẫu |
+| `npm run db:studio` | Mở Prisma Studio (xem/sửa DB) |
+| `npm run db:generate` | Generate Prisma Client |
+
+---
+
+## Cấu trúc thư mục chính
+
+```
+mini-lms/
+├── prisma/
+│   ├── schema.prisma   # Định nghĩa model DB
+│   └── seed.ts        # Script seed
+├── src/
+│   ├── app/            # Next.js App Router (pages, layout, API)
+│   │   ├── api/        # API routes
+│   │   ├── parents/    # Trang quản lý phụ huynh
+│   │   ├── students/   # Trang quản lý học sinh
+│   │   ├── classes/    # Trang quản lý lớp học
+│   │   └── subscriptions/
+│   ├── components/     # React components (layout, ui)
+│   └── lib/            # Prisma client, API helpers, utils
+├── docker-compose.yml  # PostgreSQL + app (optional)
+└── Dockerfile          # Build image app
+```
+
+---
+
+## Chạy full stack bằng Docker
+
+Chạy cả PostgreSQL và app trong container:
+
+```bash
+docker compose up -d
+```
+
+- App: [http://localhost:3000](http://localhost:3000)
+- DB: port `5432` (chỉ dùng trong mạng Docker; từ máy host dùng `localhost:5432` nếu map port).
+
+---
+
+## Tài liệu thêm
+
+- [docs/PLAN.md](docs/PLAN.md) – Kế hoạch triển khai, kiến trúc, API, business rules.
